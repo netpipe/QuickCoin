@@ -18,12 +18,14 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
   //  ui->total->setText(QString::number( ui->newprice->text().toFloat() * ui->ammount->text().toFloat() ));
-      ui->ammount->setText(QString::number(  ui->total->text().toFloat() /ui->newprice->text().toFloat()  ));
+   // ui->ammount->setText(QString::number(  ui->total->text().toFloat() /ui->newprice->text().toFloat()  ));
+     ui->ammount->setText(QString::number(  ui->total->text().toFloat() *ui->newprice->text().toFloat()  ));
+
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-          ui->profit->setText(QString::number(  ui->total->text().toFloat() - ( ui->oldprice->text().toFloat() * ui->ammount->text().toFloat() )  ));
+          ui->profit->setText(QString::number(  ui->ammount->text().toFloat() - ( ui->oldprice->text().toFloat() * ui->total->text().toFloat() )  ));
 }
 
 void MainWindow::on_actionExit_triggered()
