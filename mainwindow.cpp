@@ -1,113 +1,90 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QApplication>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QUrl>
+
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonValue>
 #include <QDebug>
 
-QString tester;
-
-class CryptoPriceFetcher {
-public:
-    CryptoPriceFetcher() {
-        manager = new QNetworkAccessManager();
-    }
-
-    ~CryptoPriceFetcher() {
-        delete manager;
-    }
-
-    float fetchPrice(const QString &cryptoId, const QString &currency) {
-        QString url = QString("https://api.coingecko.com/api/v3/simple/price?ids=%1&vs_currencies=%2")
-                          .arg(cryptoId, currency);
-        QNetworkRequest request(QUrl(url.toLatin1()));
-        qDebug() << url << endl;
-             //   QNetworkRequest request(QUrl("https://api.coingecko.com/api/v3/simple/price?ids=%1&vs_currencies=%2"));
-
-        QNetworkReply *reply = manager->get(request);
-        manager->connect(reply, &QNetworkReply::finished, [reply]() {
-            if (reply->error() == QNetworkReply::NoError) {
-                QByteArray response = reply->readAll();
-                if (response.isEmpty()) {
-                    qDebug() << "Empty response from server.";
-                    return;
-                }
-                qDebug() << "Raw response:" << response;
-
-                QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
-                 qDebug() << jsonDoc;
-
-                if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-                    QJsonObject jsonObj = jsonDoc.object();
-
-                    // Extract the cryptocurrency price
-                    for (const QString &key : jsonObj.keys()) {
-                        QJsonObject cryptoData = jsonObj.value(key).toObject();
-                        for (const QString &currency : cryptoData.keys()) {
-                            qDebug() << "Price of" << key << "in" << currency << ":" << cryptoData.value(currency).toDouble();
-                            tester= QString::number(cryptoData.value(currency).toDouble()).toFloat();
-                        }
-                    }
-                } else {
-                    qDebug() << "Failed to parse JSON response.";
-                }
-            } else {
-                qDebug() << "Error in reply:" << reply->errorString();
-            }
-
-            reply->deleteLater();
-        });
-
-    }
-
-private:
-    QNetworkAccessManager *manager;
-};
-
-
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+    : QMainWindow(parent), ui(new Ui::MainWindow), manager(new QNetworkAccessManager(this)) {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::fetchPrice(const QString &cryptoId, const QString &currency) {
+    QString url = QString("https://api.coingecko.com/api/v3/simple/price?ids=%1&vs_currencies=%2")
+                      .arg(cryptoId, currency);
+    qDebug() << "Requesting URL:" << url;
+
+    QNetworkRequest request(QUrl(url.toLatin1()));
+    QNetworkReply *reply = manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, &MainWindow::handleNetworkReply);
+}
+
+void MainWindow::handleNetworkReply() {
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    if (!reply) return;
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray response = reply->readAll();
+        qDebug() << "Raw Response:" << response;
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(response);
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject jsonObj = jsonDoc.object();
+
+            for (const QString &key : jsonObj.keys()) {
+                QJsonObject cryptoData = jsonObj.value(key).toObject();
+                for (const QString &currency : cryptoData.keys()) {
+                    double price = cryptoData.value(currency).toDouble();
+                    qDebug() << "Price of" << key << "in" << currency << ":" << price;
+
+                    // Update the newprice field in the UI
+                    ui->newprice->setText(QString::number(price));
+
+                    // Recalculate values based on the new price
+                    calculateFinalValues();
+                }
+            }
+        } else {
+            qDebug() << "Failed to parse JSON response.";
+        }
+    } else {
+        qDebug() << "Network Error:" << reply->errorString();
+    }
+
+    reply->deleteLater();
+}
+
+void MainWindow::calculateFinalValues() {
+    // Calculate ammount
+    float total = ui->total->text().toFloat();
+    float newPrice = ui->newprice->text().toFloat();
+    float oldPrice = ui->oldprice->text().toFloat();
+
+    float ammount = total * newPrice;
+    float profit = ammount - (oldPrice * total);
+
+    // Update the UI
+    ui->ammount->setText(QString::number(ammount));
+    ui->profit->setText(QString::number(profit));
+
+    qDebug() << "Ammount:" << ammount << "Profit:" << profit;
+}
 
 void MainWindow::on_pushButton_clicked()
 {
-  //  ui->total->setText(QString::number( ui->newprice->text().toFloat() * ui->ammount->text().toFloat() ));
-   // ui->ammount->setText(QString::number(  ui->total->text().toFloat() /ui->newprice->text().toFloat()  ));
 
-     CryptoPriceFetcher fetcher;
-
-     // Fetch prices of cryptocurrencies
-     fetcher.fetchPrice("bitcoin", "cad");
-    ui->newprice->setText(tester );
-    // fetcher.fetchPrice("ethereum", "usd");
-    // fetcher.fetchPrice("dogecoin", "usd");
-
+    // Fetch prices of cryptocurrencies
+    fetchPrice("bitcoin", "usd");
 }
+
 
 void MainWindow::on_pushButton_2_clicked()
 {
-            ui->ammount->setText(QString::number(  ui->total->text().toFloat() *ui->newprice->text().toFloat()  ));
-          ui->profit->setText(QString::number(  ui->ammount->text().toFloat() - ( ui->oldprice->text().toFloat() * ui->total->text().toFloat() )  ));
-
-
-
+    calculateFinalValues();
 }
 
-void MainWindow::on_actionExit_triggered()
-{
-    QApplication::exit();
-}
