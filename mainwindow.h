@@ -25,6 +25,10 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_coin_activated(const QString &arg1);
+
+    void on_country_activated(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;
