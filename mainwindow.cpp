@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QDebug>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), manager(new QNetworkAccessManager(this)) {
     ui->setupUi(this);
@@ -15,8 +16,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::fetchPrice(const QString &cryptoId, const QString &currency) {
+
+    QString cryptoId2 = ui->coin->currentText().toLatin1();
+QString currency2 = ui->country->currentText().toLatin1();
     QString url = QString("https://api.coingecko.com/api/v3/simple/price?ids=%1&vs_currencies=%2")
-                      .arg(cryptoId, currency);
+                      .arg(cryptoId2, currency2);
     qDebug() << "Requesting URL:" << url;
 
     QNetworkRequest request(QUrl(url.toLatin1()));
@@ -43,7 +47,7 @@ void MainWindow::handleNetworkReply() {
                     qDebug() << "Price of" << key << "in" << currency << ":" << price;
 
                     // Update the newprice field in the UI
-                    ui->newprice->setText(QString::number(price));
+                    ui->newprice->setText(QString::number(price, 'f', 15 ));
 
                     // Recalculate values based on the new price
                     calculateFinalValues();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>456</width>
-    <height>204</height>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,35 +15,77 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>newprice</string>
+       <string>old price</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="label_2">
+    <item row="4" column="2">
+     <widget class="QPushButton" name="pushButton">
       <property name="text">
-       <string>Ammount</string>
+       <string>getprice</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
-     <widget class="QLabel" name="label_5">
+    <item row="5" column="0">
+     <widget class="QLineEdit" name="oldprice">
       <property name="text">
-       <string>total</string>
+       <string>0.19</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="3" column="0">
      <widget class="QLineEdit" name="newprice">
       <property name="text">
        <string>0.18</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>total</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLineEdit" name="total">
+      <property name="text">
+       <string>100</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>calculateprofit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>newprice</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Ammount</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Profit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
      <widget class="QLineEdit" name="ammount">
       <property name="enabled">
        <bool>true</bool>
@@ -53,53 +95,74 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QLineEdit" name="total">
-      <property name="text">
-       <string>100</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>old price</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Profit</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLineEdit" name="oldprice">
-      <property name="text">
-       <string>0.19</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
+    <item row="5" column="1">
      <widget class="QLineEdit" name="profit">
       <property name="text">
        <string>0.18</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>calculateprofit</string>
-      </property>
+    <item row="1" column="0">
+     <widget class="QComboBox" name="coin">
+      <item>
+       <property name="text">
+        <string>bitcoin</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>dogecoin</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>litecoin</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>litedoge</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>shiba-inu</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>roger</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>xmr</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>usdc</string>
+       </property>
+      </item>
      </widget>
     </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>getprice</string>
-      </property>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="country">
+      <item>
+       <property name="text">
+        <string>usd</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>cad</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>eur</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>
