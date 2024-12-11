@@ -29,6 +29,8 @@ private slots:
 
     void on_country_activated(const QString &arg1);
 
+    void on_actionExit_triggered();
+
 private:
     Ui::MainWindow *ui;
     QNetworkAccessManager *manager;

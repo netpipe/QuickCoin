@@ -105,3 +105,9 @@ void MainWindow::on_country_activated(const QString &arg1)
      ui->countrytxt->setText( ui->country->currentText().toLatin1());
 }
 
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::quit();
+}
+
