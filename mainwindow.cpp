@@ -72,9 +72,9 @@ void MainWindow::calculateFinalValues() {
     float ammount = total * newPrice;
     float profit = ammount - (oldPrice * total);
 
-    // Update the UI
-    ui->ammount->setText(QString::number(ammount));
-    ui->profit->setText(QString::number(profit));
+    // Update the UI QString::number(price, 'f', 10 )
+    ui->ammount->setText(QString::number(ammount,'f',5));
+    ui->profit->setText(QString::number(profit,'f',5));
 
     qDebug() << "Ammount:" << ammount << "Profit:" << profit;
 }
